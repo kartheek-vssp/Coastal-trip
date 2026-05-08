@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trip With Gang | Adventure Map</title>
+    <style>
+        :root {
+            --bg-dark: #05080a;
+            --accent-active: #ff8c00;
+            --accent-done: #00ff88;
+            --accent-future: #00d4ff;
+            --glass: rgba(15, 20, 25, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #e0e0e0;
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-primary);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- HERO SECTION --- */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #101a20 0%, #05080a 100%);
+            z-index: 100;
+            position: fixed;
+            width: 100%;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            background: linear-gradient(to bottom, #fff 30%, #444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .hero-names {
+            font-size: 0.8rem;
+            color: var(--accent-future);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 40px;
+        }
+
+        .btn-begin {
+            padding: 18px 48px;
+            background: linear-gradient(45deg, #00d4ff, #0055ff);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-begin:active { transform: scale(0.92); }
+
+        /* --- MAP SECTION --- */
+        #experience {
+            opacity: 0;
+            transition: opacity 1s;
+            position: relative;
+            background: #05080a;
+            padding-bottom: 50vh;
+        }
+
+        /* Terrain Parallax Background */
+        .topo-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .contour-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent 80px, rgba(255,255,255,0.03) 81px, transparent 82px);
+            z-index: 1;
+        }
+
+        .journey-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            z-index: 5;
+        }
+
+        svg#map-svg {
+            width: 100%;
+            height: 1800px; /* Extended for more drama */
+            overflow: visible;
+        }
+
+        .route-base { fill: none; stroke: rgba(255,255,255,0.03); stroke-width: 6; stroke-linecap: round; }
+        .route-glow {
+            fill: none;
+            stroke: var(--accent-done);
+            stroke-width: 4;
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 12px var(--accent-done));
+            transition: stroke-dashoffset 0.1s linear;
+        }
+
+        /* Nodes & Labels */
+        .node-group {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 20;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .node-group:active { transform: translate(-50%, -50%) scale(0.9); }
+
+        .node-circle {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #000;
+            border: 2px solid #333;
+            box-shadow: inset 0 0 5px rgba(255,255,255,0.2);
+        }
+
+        .node-label {
+            margin-top: 15px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #444;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .node-active .node-circle {
+            background: var(--accent-active);
+            border-color: #fff;
+            box-shadow: 0 0 25px var(--accent-active);
+            animation: pulse-ring 1.5s infinite;
+        }
+
+        .node-active .node-label { color: var(--accent-active); transform: scale(1.1); }
+
+        .node-completed .node-circle { background: var(--accent-done); border-color: var(--accent-done); box-shadow: 0 0 15px var(--accent-done); }
+        .node-completed .node-label { color: #fff; }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(255, 140, 0, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 140, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 140, 0, 0); }
+        }
+
+        /* Reusable Tap Indicator */
+        #global-hint {
+            position: absolute;
+            background: linear-gradient(to right, var(--accent-active), #ff4500);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            transform: translate(-50%, -50px);
+            display: none;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(255,69,0,0.4);
+            animation: float 2s infinite ease-in-out;
+        }
+
+        @keyframes float { 0%, 100% { transform: translate(-50%, -50px); } 50% { transform: translate(-50%, -60px); } }
+
+        #vehicle {
+            position: absolute;
+            z-index: 60;
+            font-size: 28px;
+            display: none;
+            filter: drop-shadow(0 0 10px white);
+        }
+
+        /* --- LUXURY BOTTOM SHEET --- */
+        #sheet-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+            z-index: 900; display: none; opacity: 0; transition: 0.4s;
+        }
+
+        #bottom-sheet {
+            position: fixed; bottom: -100%; left: 0; width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(30px);
+            border-top: 1px solid var(--glass-border);
+            border-radius: 32px 32px 0 0;
+            padding: 40px 24px;
+            z-index: 1000;
+            transition: bottom 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            color: white;
+        }
+
+        .sheet-active { bottom: 0 !important; }
+
+        .destination-img {
+            width: 100%;
+            height: 160px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            position: relative;
+        }
+
+        .destination-img::after {
+            content: "SATELLITE VIEW";
+            font-size: 10px;
+            letter-spacing: 3px;
+            opacity: 0.3;
+        }
+
+        .lead-tag {
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--accent-future);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* --- LOADER --- */
+        #loader {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: var(--bg-dark); z-index: 2000;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <section id="hero">
+        <h1 class="hero-title">Trip With Gang</h1>
+        <p class="hero-names">Harsha • Pooja • Athulith • Subbu • Kartheek</p>
+        <button class="btn-begin" onclick="beginJourney()">Begin Journey</button>
+    </section>
+
+    <section id="experience">
+        <div class="topo-layer"></div>
+        <div class="contour-bg"></div>
+        
+        <div class="journey-container">
+            <svg id="map-svg" viewBox="0 0 400 1800">
+                <path id="route-path" class="route-base" d="M200,100 C350,300 50,500 200,700 C350,900 50,1100 200,1300 C350,1500 50,1650 200,1750" />
+                <path id="route-glow" class="route-glow" d="M200,100 C350,300 50,500 200,700 C350,900 50,1100 200,1300 C350,1500 50,1650 200,1750" />
+            </svg>
+            <div id="vehicle">🚗</div>
+            <div id="global-hint">TAP TO EXPLORE</div>
+        </div>
+    </section>
+
+    <div id="loader">
+        <div style="width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--accent-future); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        <p id="loader-text" style="margin-top: 20px; letter-spacing: 2px; font-size: 10px; font-weight: 900; color: #666;"></p>
+    </div>
+
+    <div id="sheet-overlay" onclick="closeSheet()"></div>
+    <div id="bottom-sheet">
+        <div style="width: 40px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin: -20px auto 25px;"></div>
+        <div id="lead-display" class="lead-tag">ROUTE LEAD: HARSHA</div>
+        <h2 id="sheet-title" style="font-size: 2rem; margin-bottom: 20px;">Destination</h2>
+        
+        <div class="destination-img" id="map-snip">
+            <div style="position: absolute; width: 100%; height: 100%; background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.02) 20px, rgba(255,255,255,0.02) 40px);"></div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                <p style="font-size: 10px; color: #888; margin-bottom: 5px;">VIBE</p>
+                <p style="font-weight: 700;">Adventure</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                <p style="font-size: 10px; color: #888; margin-bottom: 5px;">STAY</p>
+                <p style="font-weight: 700;">Eco-Resort</p>
+            </div>
+        </div>
+        <button onclick="closeSheet()" style="width: 100%; margin-top: 25px; padding: 20px; background: white; border: none; color: black; border-radius: 18px; font-weight: 800; font-size: 1rem;">CONTINUE JOURNEY</button>
+    </div>
+
+    <script>
+        const destinations = [
+            { name: "Hyderabad", pos: 0, status: 'completed', lead: 'Harsha', transport: '✈️' },
+            { name: "Hubli", pos: 0.22, status: 'active', lead: 'Pooja', transport: '🚗' },
+            { name: "Dandeli", pos: 0.44, status: 'upcoming', lead: 'Athulith', transport: '🚗' },
+            { name: "Gokarna", pos: 0.66, status: 'upcoming', lead: 'Subbu', transport: '🚗' },
+            { name: "Murudeshwar", pos: 0.84, status: 'upcoming', lead: 'Kartheek', transport: '🚗' },
+            { name: "Udupi", pos: 1.0, status: 'upcoming', lead: 'Gang', transport: '✈️' }
+        ];
+
+        let currentIndex = 1;
+        const path = document.getElementById('route-path');
+        const glow = document.getElementById('route-glow');
+        const length = path.getTotalLength();
+
+        function beginJourney() {
+            document.getElementById('hero').style.transform = 'translateY(-100%)';
+            document.getElementById('experience').style.opacity = '1';
+            glow.style.strokeDasharray = length;
+            glow.style.strokeDashoffset = length;
+            renderNodes();
+            updateProgress();
+        }
+
+        function renderNodes() {
+            document.querySelectorAll('.node-group').forEach(n => n.remove());
+            destinations.forEach((d, i) => {
+                const pt = path.getPointAtLength(d.pos * length);
+                const node = document.createElement('div');
+                node.className = `node-group node-${d.status}`;
+                node.style.left = `${pt.x}px`;
+                node.style.top = `${pt.y}px`;
+                node.innerHTML = `<div class="node-circle"></div><div class="node-label">${d.name}</div>`;
+                
+                if (i === currentIndex) {
+                    node.onclick = () => openSheet(d);
+                    const hint = document.getElementById('global-hint');
+                    hint.style.display = 'block';
+                    hint.style.left = `${pt.x}px`;
+                    hint.style.top = `${pt.y}px`;
+                }
+                document.querySelector('.journey-container').appendChild(node);
+            });
+        }
+
+        function updateProgress() {
+            const offset = length - (length * destinations[currentIndex].pos);
+            glow.style.strokeDashoffset = offset;
+        }
+
+        async function openSheet(dest) {
+            const loader = document.getElementById('loader');
+            document.getElementById('loader-text').innerText = `SYNCHRONIZING WITH ${dest.name.toUpperCase()}...`;
+            loader.style.display = 'flex';
+            
+            await new Promise(r => setTimeout(r, 1600));
+            loader.style.display = 'none';
+
+            document.getElementById('sheet-title').innerText = dest.name;
+            document.getElementById('lead-display').innerText = `ROUTE LEAD: ${dest.lead.toUpperCase()}`;
+            document.getElementById('sheet-overlay').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('sheet-overlay').style.opacity = '1';
+                document.getElementById('bottom-sheet').classList.add('sheet-active');
+            }, 10);
+        }
+
+        function closeSheet() {
+            document.getElementById('bottom-sheet').classList.remove('sheet-active');
+            document.getElementById('sheet-overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('sheet-overlay').style.display = 'none';
+                if (currentIndex < destinations.length - 1) nextLeg();
+            }, 400);
+        }
+
+        function nextLeg() {
+            const prev = currentIndex;
+            currentIndex++;
+            destinations[prev].status = 'completed';
+            destinations[currentIndex].status = 'active';
+            
+            animateTravel(destinations[prev].pos, destinations[currentIndex].pos, destinations[prev].transport);
+        }
+
+        function animateTravel(startFrac, endFrac, icon) {
+            const veh = document.getElementById('vehicle');
+            veh.innerText = icon;
+            veh.style.display = 'block';
+            
+            let start = null;
+            const duration = 2500;
+
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                const progress = Math.min((timestamp - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3); // Ease Out Cubic
+                
+                const curFrac = startFrac + (endFrac - startFrac) * eased;
+                const pt = path.getPointAtLength(curFrac * length);
+                
+                veh.style.left = `${pt.x - 14}px`;
+                veh.style.top = `${pt.y - 14}px`;
+
+                // Point 4: Auto-Pan Camera
+                window.scrollTo({ top: pt.y - window.innerHeight / 2, behavior: 'auto' });
+                
+                // Real-time path glow
+                glow.style.strokeDashoffset = length - (length * curFrac);
+
+                if (progress < 1) requestAnimationFrame(step);
+                else {
+                    setTimeout(() => {
+                        veh.style.display = 'none';
+                        renderNodes();
+                    }, 500);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+    </script>
+</body>
+</html>
