@@ -10,47 +10,68 @@
             --accent-active: #ff8c00;
             --accent-done: #00ff88;
             --accent-future: #00d4ff;
-            --glass: rgba(15, 20, 25, 0.95);
+            --glass: rgba(15, 20, 25, 0.98);
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #e0e0e0;
             --font-primary: 'Inter', sans-serif;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-dark); color: var(--text-main); font-family: var(--font-primary); overflow-x: hidden; scroll-behavior: smooth; }
+
+        /* HERO SECTION */
         #hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #101a20 0%, #05080a 100%); z-index: 100; position: fixed; width: 100%; transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1); }
         .hero-title { font-size: 3.5rem; font-weight: 900; background: linear-gradient(to bottom, #fff 30%, #444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
         .hero-names { font-size: 0.8rem; color: var(--accent-future); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 40px; }
         .btn-begin { padding: 18px 48px; background: linear-gradient(45deg, #00d4ff, #0055ff); border: none; border-radius: 50px; color: white; font-weight: 700; font-size: 1.1rem; box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3); cursor: pointer; }
+
+        /* JOURNEY MAP */
         #experience { opacity: 0; transition: opacity 1s; position: relative; padding-bottom: 50vh; }
         .journey-container { position: relative; width: 100%; max-width: 450px; margin: 0 auto; z-index: 5; }
         svg#map-svg { width: 100%; height: 1800px; overflow: visible; }
         .route-base { fill: none; stroke: rgba(255, 255, 255, 0.03); stroke-width: 6; stroke-linecap: round; }
         .route-glow { fill: none; stroke: var(--accent-done); stroke-width: 4; stroke-linecap: round; filter: drop-shadow(0 0 12px var(--accent-done)); transition: stroke-dashoffset 0.1s linear; }
+        
         .node-group { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; z-index: 20; }
         .node-circle { width: 18px; height: 18px; border-radius: 50%; background: #000; border: 2px solid #333; }
         .node-label { margin-top: 15px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #444; }
         .node-active .node-circle { background: var(--accent-active); border-color: #fff; box-shadow: 0 0 25px var(--accent-active); animation: pulse-ring 1.5s infinite; }
-        .node-active .node-label { color: var(--accent-active); }
         .node-completed .node-circle { background: var(--accent-done); border-color: var(--accent-done); }
-        .node-completed .node-label { color: #fff; }
-        #global-hint { position: absolute; background: var(--accent-active); color: white; padding: 6px 14px; border-radius: 30px; font-size: 10px; font-weight: 900; transform: translate(-50%, -50px); display: none; z-index: 100; animation: float 2s infinite; }
         #vehicle { position: absolute; z-index: 60; font-size: 28px; display: none; filter: drop-shadow(0 0 10px white); }
-        #sheet-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 900; display: none; opacity: 0; transition: 0.4s; }
-        #bottom-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--glass); backdrop-filter: blur(30px); border-top: 1px solid var(--glass-border); border-radius: 32px 32px 0 0; padding: 40px 24px; z-index: 1000; transition: bottom 0.6s cubic-bezier(0.16, 1, 0.3, 1); color: white; max-height: 85vh; overflow-y: auto; }
+
+        /* BOTTOM SHEET */
+        #sheet-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 900; display: none; opacity: 0; transition: 0.4s; }
+        #bottom-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--glass); border-top: 1px solid var(--glass-border); border-radius: 32px 32px 0 0; padding: 25px 0; z-index: 1000; transition: bottom 0.6s cubic-bezier(0.16, 1, 0.3, 1); color: white; max-height: 92vh; overflow-y: auto; }
         .sheet-active { bottom: 0 !important; }
-        .lead-tag { background: rgba(0, 212, 255, 0.15); color: var(--accent-future); padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; margin-bottom: 10px; display: inline-block; }
-        .grid-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
-        .activity-card { background-size: cover; background-position: center; height: 140px; padding: 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden; }
-        .activity-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent); }
+        
+        .padding-wrap { padding: 0 20px; }
+        .lead-tag { background: rgba(0, 212, 255, 0.15); color: var(--accent-future); padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; margin-bottom: 8px; display: inline-block; }
+        
+        .section-header { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #666; margin: 25px 20px 15px; display: flex; align-items: center; }
+        .section-header::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.05); margin-left: 15px; }
+
+        /* VERTICAL POINTER LISTS */
+        .pointer-list { display: flex; flex-direction: column; gap: 10px; padding: 0 20px; }
+        .pointer-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 15px 20px; border-radius: 18px; display: flex; align-items: center; gap: 15px; }
+        .pointer-emoji { font-size: 22px; }
+        .pointer-text { font-size: 14px; font-weight: 500; color: #ddd; }
+
+        /* IMAGE CARDS */
+        .img-container { display: flex; overflow-x: auto; gap: 12px; padding: 0 20px 5px; scroll-snap-type: x mandatory; }
+        .img-container::-webkit-scrollbar { display: none; }
+        .clean-img-card { flex: 0 0 280px; height: 180px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); background-size: cover; background-position: center; scroll-snap-align: start; background-color: #111; }
+
         #loader { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--bg-dark); z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+
     <section id="hero">
         <h1 class="hero-title">Trip With Gang</h1>
         <p class="hero-names">Harsha • Pooja • Athulith • Subbu • Kartheek</p>
         <button class="btn-begin" onclick="beginJourney()">Begin Journey</button>
     </section>
+
     <section id="experience">
         <div class="journey-container">
             <svg id="map-svg" viewBox="0 0 400 1800">
@@ -58,42 +79,196 @@
                 <path id="route-glow" class="route-glow" d="M200,100 C350,300 50,500 200,700 C350,900 50,1100 200,1300 C350,1500 50,1650 200,1750" />
             </svg>
             <div id="vehicle">🚗</div>
-            <div id="global-hint">TAP TO EXPLORE</div>
         </div>
     </section>
+
     <div id="loader">
         <div style="width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--accent-future); border-radius: 50%; animation: spin 1s linear infinite;"></div>
         <p id="loader-text" style="margin-top: 20px; font-size: 10px; font-weight: 900; color: #666;"></p>
     </div>
+
     <div id="sheet-overlay" onclick="closeSheet()"></div>
     <div id="bottom-sheet">
-        <div style="width: 40px; height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: 2px; margin: -20px auto 25px;"></div>
-        <div id="lead-display" class="lead-tag"></div>
-        <h2 id="sheet-title" style="font-size: 2rem; margin-bottom: 15px;"></h2>
-        <div class="grid-cards" id="activity-grid"></div>
-        <div id="summary-content"></div>
-        <button onclick="closeSheet()" id="continue-btn" style="width: 100%; margin-top: 20px; padding: 18px; background: white; border: none; color: black; border-radius: 18px; font-weight: 800;">CONTINUE JOURNEY</button>
+        <div style="width: 40px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin: 0 auto 20px;"></div>
+        
+        <div class="padding-wrap">
+            <div id="lead-display" class="lead-tag"></div>
+            <h2 id="sheet-title" style="font-size: 2.2rem; margin-bottom: 20px;"></h2>
+        </div>
+
+        <div class="img-container" id="main-images"></div>
+
+        <div class="section-header">Places to Cover</div>
+        <div class="pointer-list" id="places-list"></div>
+
+        <div class="section-header">Trip Activities</div>
+        <div class="pointer-list" id="todo-list"></div>
+
+        <div class="padding-wrap" id="summary-content"></div>
+        <div class="padding-wrap">
+            <button onclick="closeSheet()" id="continue-btn" style="width: 100%; margin-top: 25px; padding: 20px; background: white; border: none; color: black; border-radius: 22px; font-weight: 900;">CONTINUE JOURNEY</button>
+        </div>
     </div>
+
     <script>
         const destinations = [
             { name: "Hyderabad", pos: 0, status: 'completed', lead: 'Harsha', interactive: false },
-            { name: "Hubli", pos: 0.22, status: 'active', lead: 'Pooja', interactive: true, activities: [{ image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Unkal_Lake_Hubli.jpg/1024px-Unkal_Lake_Hubli.jpg", title: "Unkal Lake", tag: "Sunset View" }, { image: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Glass_House_Garden_Hubli.jpg", title: "Glass House", tag: "Botanical" }] },
-            { name: "Dandeli", pos: 0.44, status: 'upcoming', lead: 'Athulith', interactive: true, activities: [{ image: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Rafting_in_Dandeli.jpg", title: "Rafting", tag: "Adrenaline" }, { image: "https://upload.wikimedia.org/wikipedia/commons/4/43/Dandeli_Wildlife_Sanctuary.jpg", title: "Jungle Safari", tag: "Wild" }] },
-            { name: "Gokarna", pos: 0.66, status: 'upcoming', lead: 'Subbu', interactive: true, activities: [{ image: "https://upload.wikimedia.org/wikipedia/commons/3/30/Om_beach_Gokarna.jpg", title: "Beach Trek", tag: "Top Rated" }, { image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Gokarna_Beach.jpg/1024px-Gokarna_Beach.jpg", title: "Bioluminescence", tag: "Hidden Gem" }] },
-            { name: "Murudeshwar", pos: 0.84, status: 'upcoming', lead: 'Kartheek', interactive: true, activities: [{ image: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Murudeshwara_Statue.jpg", title: "Tallest Shiva", tag: "Iconic" }, { image: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Netrani_Island.jpg", title: "Scuba Netrani", tag: "Epic" }] },
-            { name: "Udupi", pos: 1.0, status: 'upcoming', lead: 'Gang', interactive: true, isFinal: true, activities: [{ image: "https://upload.wikimedia.org/wikipedia/commons/d/df/St._Mary%27s_Islands_Udupi.jpg", title: "St. Mary's", tag: "Must Visit" }, { image: "https://upload.wikimedia.org/wikipedia/commons/4/40/Malpe_Beach_Udupi.jpg", title: "Surfing Malpe", tag: "Coastal" }] }
+            { 
+                name: "Hubli", pos: 0.22, status: 'active', lead: 'Pooja', interactive: true, 
+                // ADD YOUR IMAGE URLs HERE (up to 3 or more)
+                mainImgs: [
+                    "https://images.unsplash.com/photo-1600100397561-4339985791ed?w=600", 
+                    "https://images.unsplash.com/photo-1622325375960-9ba249110006?w=600",
+                    "https://images.unsplash.com/photo-1548013146-72479768bbaa?w=600"
+                ],
+                places: [{t:"Unkal Lake", e:"🌅"}, {t:"Nrupatunga Betta", e:"🌲"}, {t:"Glass House", e:"🌿"}, {t:"Siddharoodha Math", e:"🏛️"}],
+                todo: [{t:"Sunset Point", e:"📸"}, {t:"Breakfast Trail", e:"🥞"}, {t:"Street Food", e:"🥘"}, {t:"Essentials Shop", e:"🛒"}]
+            },
+            { 
+                name: "Dandeli", pos: 0.44, status: 'upcoming', lead: 'Athulith', interactive: true, 
+                mainImgs: [
+                    "https://images.unsplash.com/photo-1590490359854-dfba19688d70?w=600", 
+                    "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600",
+                    "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600"
+                ],
+                places: [{t:"Kali River", e:"💧"}, {t:"Syntheri Rocks", e:"🗿"}, {t:"Supa Dam", e:"🌊"}, {t:"Kavala Caves", e:"🦇"}],
+                todo: [{t:"River Rafting", e:"🛶"}, {t:"Jungle Safari", e:"🐅"}, {t:"Ziplining", e:"🦅"}, {t:"Campfire", e:"🔥"}]
+            },
+            { 
+                name: "Gokarna", pos: 0.66, status: 'upcoming', lead: 'Subbu', interactive: true, 
+                mainImgs: [
+                    "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?w=600", 
+                    "https://images.unsplash.com/photo-1563821013405-f37648f5727d?w=600",
+                    "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600"
+                ],
+                places: [{t:"Om Beach", e:"🕉️"}, {t:"Kudle Beach", e:"🏖️"}, {t:"Paradise Beach", e:"🏝️"}, {t:"Mirjan Fort", e:"🏰"}],
+                todo: [{t:"Beach Trek", e:"🥾"}, {t:"Sunset Photos", e:"🧘"}, {t:"Café Hopping", e:"☕"}, {t:"Jet Ski", e:"🚤"}]
+            },
+            { 
+                name: "Murudeshwar", pos: 0.84, status: 'upcoming', lead: 'Kartheek', interactive: true, 
+                mainImgs: [
+                    "https://images.unsplash.com/photo-1621255194488-8b9016147496?w=600", 
+                    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600",
+                    "https://images.unsplash.com/photo-1582972236019-ea4af5faf581?w=600"
+                ],
+                places: [{t:"Temple", e:"⛩️"}, {t:"Statue Park", e:"🗿"}, {t:"Netrani Island", e:"🏝️"}, {t:"Main Beach", e:"🌊"}],
+                todo: [{t:"Scuba Diving", e:"🤿"}, {t:"Temple Visit", e:"🙏"}, {t:"Boat Ride", e:"🚤"}, {t:"Seafood Tour", e:"🦐"}]
+            },
+            { 
+                name: "Udupi", pos: 1.0, status: 'upcoming', lead: 'Gang', interactive: true, isFinal: true, 
+                mainImgs: [
+                    "https://images.unsplash.com/photo-1605335832367-9614c2787e68?w=600", 
+                    "https://images.unsplash.com/photo-1596402184320-417d717867cd?w=600",
+                    "https://images.unsplash.com/photo-1590013330452-94459a9307d6?w=600"
+                ],
+                places: [{t:"Malpe Beach", e:"🏖️"}, {t:"St. Mary's", e:"🗿"}, {t:"Krishna Temple", e:"🛕"}, {t:"Kapu Beach", e:"🗼"}],
+                todo: [{t:"Island Boat", e:"⛴️"}, {t:"Lighthouse", e:"🔦"}, {t:"Food Tour", e:"🍱"}, {t:"Surfing", e:"🏄"}]
+            }
         ];
+
         let currentIndex = 1;
         const path = document.getElementById('route-path');
         const glow = document.getElementById('route-glow');
         const length = path.getTotalLength();
-        function beginJourney() {document.getElementById('hero').style.transform = 'translateY(-100%)'; document.getElementById('experience').style.opacity = '1'; glow.style.strokeDasharray = length; glow.style.strokeDashoffset = length; renderNodes(); updateProgress(); }
-        function renderNodes() {document.querySelectorAll('.node-group').forEach(n => n.remove()); destinations.forEach((d, i) => {const pt = path.getPointAtLength(d.pos * length); const node = document.createElement('div'); node.className = `node-group node-${d.status}`; node.style.left = `${pt.x}px`; node.style.top = `${pt.y}px`; node.innerHTML = `<div class="node-circle"></div><div class="node-label">${d.name}</div>`; if (d.interactive && i === currentIndex) {node.onclick = () => openSheet(d); const hint = document.getElementById('global-hint'); hint.style.display = 'block'; hint.style.left = `${pt.x}px`; hint.style.top = `${pt.y}px`; } document.querySelector('.journey-container').appendChild(node); }); }
+
+        function beginJourney() {
+            document.getElementById('hero').style.transform = 'translateY(-100%)';
+            document.getElementById('experience').style.opacity = '1';
+            glow.style.strokeDasharray = length;
+            glow.style.strokeDashoffset = length;
+            renderNodes();
+            updateProgress();
+        }
+
+        function renderNodes() {
+            document.querySelectorAll('.node-group').forEach(n => n.remove());
+            destinations.forEach((d, i) => {
+                const pt = path.getPointAtLength(d.pos * length);
+                const node = document.createElement('div');
+                node.className = `node-group node-${d.status}`;
+                node.style.left = `${pt.x}px`;
+                node.style.top = `${pt.y}px`;
+                node.innerHTML = `<div class="node-circle"></div><div class="node-label">${d.name}</div>`;
+                if (d.interactive && i === currentIndex) {
+                    node.onclick = () => openSheet(d);
+                }
+                document.querySelector('.journey-container').appendChild(node);
+            });
+        }
+
         function updateProgress() { glow.style.strokeDashoffset = length - (length * destinations[currentIndex].pos); }
-        async function openSheet(dest) {document.getElementById('loader-text').innerText = `SYNCING ${dest.name.toUpperCase()}...`; document.getElementById('loader').style.display = 'flex'; await new Promise(r => setTimeout(r, 1000)); document.getElementById('loader').style.display = 'none'; document.getElementById('sheet-title').innerText = dest.name; document.getElementById('lead-display').innerText = `ROUTE LEAD: ${dest.lead.toUpperCase()}`; document.getElementById('activity-grid').innerHTML = dest.activities.map(act => ` <div class="activity-card" style="background-image: url('${act.image}');"> <div class="activity-overlay"></div> <div style="position: relative; z-index: 2;"> <div style="font-size: 13px; font-weight: 700; color: white;">${act.title}</div> <div style="font-size: 9px; color: var(--accent-future); text-transform: uppercase; margin-top: 4px;">${act.tag}</div> </div> </div>`).join(''); const summary = document.getElementById('summary-content'); const contBtn = document.getElementById('continue-btn'); if(dest.isFinal) {summary.innerHTML = `<div style="margin-top: 30px; padding: 20px; background: rgba(0, 255, 136, 0.1); border: 1px solid var(--accent-done); border-radius: 20px;"> <h3 style="color: var(--accent-done); margin-bottom: 10px;">🏆 Trip Completed!</h3> <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;"><span>Total Est. Budget:</span> <b>₹35,000</b></div> <div style="display: flex; justify-content: space-between; font-size: 14px; color: var(--accent-future);"><span>Per Person:</span> <b>₹7,000</b></div></div>`; contBtn.innerText = "FINISH ADVENTURE"; } else { summary.innerHTML = ""; contBtn.innerText = "CONTINUE JOURNEY"; } document.getElementById('sheet-overlay').style.display = 'block'; setTimeout(() => { document.getElementById('sheet-overlay').style.opacity = '1'; document.getElementById('bottom-sheet').classList.add('sheet-active'); }, 10); }
-        function closeSheet() {document.getElementById('bottom-sheet').classList.remove('sheet-active'); document.getElementById('sheet-overlay').style.opacity = '0'; setTimeout(() => { document.getElementById('sheet-overlay').style.display = 'none'; if (currentIndex < destinations.length - 1) nextLeg(); }, 400); }
-        function nextLeg() {const prev = currentIndex; currentIndex++; destinations[prev].status = 'completed'; destinations[currentIndex].status = 'active'; animateTravel(destinations[prev].pos, destinations[currentIndex].pos); }
-        function animateTravel(s, e) {const v = document.getElementById('vehicle'); v.style.display = 'block'; let start = null; function step(t) {if (!start) start = t; const p = Math.min((t - start) / 2000, 1); const cur = s + (e - s) * (1 - Math.pow(1 - p, 3)); const pt = path.getPointAtLength(cur * length); v.style.left = `${pt.x - 14}px`; v.style.top = `${pt.y - 14}px`; window.scrollTo({ top: pt.y - window.innerHeight / 2 }); glow.style.strokeDashoffset = length - (length * cur); if (p < 1) requestAnimationFrame(step); else { v.style.display = 'none'; renderNodes(); } } requestAnimationFrame(step); }
+
+        async function openSheet(dest) {
+            document.getElementById('loader').style.display = 'flex';
+            await new Promise(r => setTimeout(r, 400));
+            document.getElementById('loader').style.display = 'none';
+
+            document.getElementById('sheet-title').innerText = dest.name;
+            document.getElementById('lead-display').innerText = `ROUTE LEAD: ${dest.lead.toUpperCase()}`;
+            
+            // Render Photos
+            document.getElementById('main-images').innerHTML = dest.mainImgs.map(url => `
+                <div class="clean-img-card" style="background-image: url('${url}');"></div>`).join('');
+
+            // Render Places Vertical List
+            document.getElementById('places-list').innerHTML = dest.places.map(p => `
+                <div class="pointer-card">
+                    <span class="pointer-emoji">${p.e}</span>
+                    <span class="pointer-text">${p.t}</span>
+                </div>`).join('');
+
+            // Render Todo Vertical List
+            document.getElementById('todo-list').innerHTML = dest.todo.map(a => `
+                <div class="pointer-card">
+                    <span class="pointer-emoji">${a.e}</span>
+                    <span class="pointer-text">${a.t}</span>
+                </div>`).join('');
+
+            const summary = document.getElementById('summary-content');
+            if(dest.isFinal) {
+                summary.innerHTML = `<div style="margin-top: 25px; padding: 25px; background: rgba(0, 255, 136, 0.05); border: 1px dashed var(--accent-done); border-radius: 25px;">
+                    <h3 style="color: var(--accent-done); margin-bottom: 8px;">🏆 Trip Plan Summary</h3>
+                    <div style="display: flex; justify-content: space-between; font-size: 14px; color: white;"><span>Est. Budget:</span> <b>₹35,000</b></div>
+                    <div style="display: flex; justify-content: space-between; font-size: 14px; color: var(--accent-future);"><span>Per Person:</span> <b>₹7,000</b></div></div>`;
+            } else { summary.innerHTML = ""; }
+
+            document.getElementById('sheet-overlay').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('sheet-overlay').style.opacity = '1';
+                document.getElementById('bottom-sheet').classList.add('sheet-active');
+            }, 10);
+        }
+
+        function closeSheet() {
+            document.getElementById('bottom-sheet').classList.remove('sheet-active');
+            document.getElementById('sheet-overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('sheet-overlay').style.display = 'none';
+                if (currentIndex < destinations.length - 1) nextLeg();
+            }, 400);
+        }
+
+        function nextLeg() {
+            const prev = currentIndex; currentIndex++;
+            destinations[prev].status = 'completed'; destinations[currentIndex].status = 'active';
+            animateTravel(destinations[prev].pos, destinations[currentIndex].pos);
+        }
+
+        function animateTravel(s, e) {
+            const v = document.getElementById('vehicle'); v.style.display = 'block';
+            let start = null;
+            function step(t) {
+                if (!start) start = t;
+                const p = Math.min((t - start) / 2000, 1);
+                const cur = s + (e - s) * (1 - Math.pow(1 - p, 3));
+                const pt = path.getPointAtLength(cur * length);
+                v.style.left = `${pt.x - 14}px`; v.style.top = `${pt.y - 14}px`;
+                window.scrollTo({ top: pt.y - window.innerHeight / 2 });
+                glow.style.strokeDashoffset = length - (length * cur);
+                if (p < 1) requestAnimationFrame(step); else { v.style.display = 'none'; renderNodes(); }
+            }
+            requestAnimationFrame(step);
+        }
     </script>
 </body>
 </html>
